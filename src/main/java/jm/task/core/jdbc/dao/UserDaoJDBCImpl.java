@@ -8,10 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Util util;
+    private Connection connection = Util.getConnection();
     private ResultSet resultSet;
     private DatabaseMetaData dbm;
-    private Connection connection;
     private Statement statement;
     final private String createTableSQL = "CREATE TABLE IF NOT EXISTS USER (id INTEGER not NULL AUTO_INCREMENT,  name VARCHAR(255), lastName VARCHAR(255), age INTEGER, PRIMARY KEY (id))";
     final private String dropTableSQL = "DROP TABLE USER";
@@ -22,9 +21,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public UserDaoJDBCImpl() {
         try {
-            util = new Util();
-            connection = util.getConnection();
-            statement = util.getStatement();
+            statement = connection.createStatement();
             dbm = connection.getMetaData();
         } catch (SQLException e) {
             e.printStackTrace();
